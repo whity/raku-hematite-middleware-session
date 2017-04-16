@@ -1,0 +1,1 @@
+- only clean the flash vars if the response isn't a redirect (3xx) ???????
