@@ -1,6 +1,6 @@
 # Hematite Session Middleware
 
-[![Actions Status](https://github.com/github/docs/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/whity/raku-hematite-middleware-session/actions)
+[![test](https://github.com/whity/raku-hematite-middleware-session/actions/workflows/test.yml/badge.svg)](https://github.com/whity/raku-hematite-middleware-session/actions/workflows/test.yml)
 
 ## Usage
 
