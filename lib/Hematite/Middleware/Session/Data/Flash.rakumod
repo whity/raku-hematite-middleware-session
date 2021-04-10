@@ -1,4 +1,7 @@
-unit class Hematite::Middleware::Session::Data::Flash does Associative does Iterable;
+unit class Hematite::Middleware::Session::Data::Flash;
+
+also does Associative;
+also does Iterable;
 
 has $!data;
 has %!old_data;
@@ -9,9 +12,11 @@ method new(%data) {
 }
 
 submethod BUILD(:%data!) {
-    %!old_data = %data;
-    $!data     = %data = ();
-    %!all_data = ($!data.Hash, %!old_data);
+    %!old_data = %data.raku.EVAL;
+    $!data     = %data;
+    %!all_data = %!old_data;
+
+    $!data{$_}:delete for $!data.keys;
 
     return self;
 }
@@ -21,12 +26,11 @@ multi method AT-KEY(Str $key) is rw {
     my $element_set     := $!data{$key};
     my $element_set_all := %!all_data{$key};
 
-    # get elements
-    my $element1 := $!data{$key};
-    my $element2 := %!old_data{$key};
+    # get element
+    my $element_get := %!all_data{$key};
 
-    return Proxy.new(
-        FETCH => method () { $element1 || $element2; },
+    return-rw Proxy.new(
+        FETCH => method () { $element_get },
         STORE => method ($value) {
             $element_set     = $value;
             $element_set_all = $value;
@@ -39,8 +43,8 @@ method EXISTS-KEY(Str $key) {
 }
 
 method DELETE-KEY(Str $key) {
-    %!all_data{$key}:delete;
-    return $!data{$key}:delete;
+    $!data{$key}:delete;
+    return %!all_data{$key}:delete;
 }
 
-method iterator() { return %!all_data.iterator; }
+method iterator { return %!all_data.iterator; }

@@ -1,0 +1,1 @@
+prove -rv -e "raku -I ./lib" t

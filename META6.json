@@ -1,0 +1,28 @@
+{
+    "perl"         : "6.d",
+    "name"         : "Hematite-Middleware-Session",
+    "license"      : "Artistic-2.0",
+    "version"      : "0.0.2",
+    "description"  : "session middleware for the hematite web framework",
+    "depends"      : [
+        "Gcrypt::Simple",
+        "Hematite",
+        "JSON::Fast",
+        "Logger",
+        "MIME::Base64",
+        "Redis",
+        "UUID"
+    ],
+    "test-depends" : [ ],
+    "provides"     : {
+        "Hematite::Middleware::Session"               : "lib/Hematite/Middleware/Session.rakumod",
+        "Hematite::Middleware::Session::Data"         : "lib/Hematite/Middleware/Session/Data.rakumod",
+        "Hematite::Middleware::Session::Data::Flash"  : "lib/Hematite/Middleware/Session/Data/Flash.rakumod",
+        "Hematite::Middleware::Session::Store"        : "lib/Hematite/Middleware/Session/Store.rakumod",
+        "Hematite::Middleware::Session::Store::Cookie": "lib/Hematite/Middleware/Session/Store/Cookie.rakumod",
+        "Hematite::Middleware::Session::Store::Redis" : "lib/Hematite/Middleware/Session/Store/Redis.rakumod",
+        "X::Hematite::Session::NotFoundException"     : "lib/X/Hematite/Session/NotFoundException.rakumod"
+    },
+    "authors"      : [ "André Brás" ],
+    "support"      : { "source"   : "https://github.com/whity/raku-hematite-middleware-session.git" }
+}
