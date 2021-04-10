@@ -15,7 +15,7 @@ jobs:
             - name: Setup raku
               uses: Raku/setup-raku@v1  # By default, this sets up the latest rakudo
             - name: Install Gcrypt
-              run: sudo apt install libgcrypt20
+              run: sudo apt install libgcrypt20-dev
             - name: Install module dependencies
               run: zef install --deps-only . --force-test
             - name: Run tests
