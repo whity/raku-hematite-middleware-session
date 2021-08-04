@@ -2,7 +2,7 @@
     "perl"         : "6.d",
     "name"         : "Hematite::Middleware::Session",
     "license"      : "Artistic-2.0",
-    "version"      : "0.0.3",
+    "version"      : "0.1.0",
     "description"  : "session middleware for the hematite web framework",
     "depends"      : [
         "Gcrypt",

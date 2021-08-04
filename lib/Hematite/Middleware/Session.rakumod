@@ -80,13 +80,13 @@ method CALL-ME {
         }
 
         # calculate expires
-        my DateTime $expires_at = self._calculate-expires-at;
+        my (DateTime $expires_at, Int $max_age) = self._calculate-expires-at;
 
         # save session
         $!store.save-session-data($sid, %data, $expires_at);
 
         # set cookie
-        self._set-cookie($sid, $expires_at);
+        self._set-cookie($sid, $max_age);
 
         CATCH {
             my $ex = $_;
@@ -111,25 +111,27 @@ method CALL-ME {
     return;
 }
 
-method _set-cookie(Str $sid, DateTime $expires_at --> Nil) {
+method _set-cookie(Str $sid, Int $max_age --> Nil) {
     my Str $name = %!config<cookie>;
 
     self.res.cookies{$name} = {
-        'value'   => $sid,
-        'expires' => $expires_at.posix,
+        value    => $sid,
+        max-age  => $max_age.Str,
+        httponly => %!config<httponly> // True,
+        secure   => %!config<secure> // False,
     };
 
     return;
 }
 
-method _calculate-expires-at(--> DateTime) {
+method _calculate-expires-at(--> List) {
     my $expires_in = %!config<expires_in> || '';
     my $match      = $expires_in ~~ m:i/^$<amount>=[\d+]$<unit>=[(sec||min||hour||day||month||year)s?]$/;
-    my $amount     = 1;
+    my Int $amount = 1;
     my $unit       = 'hour';
 
     if ($match) {
-        $amount = $match<amount>.Str;
+        $amount = $match<amount>.Str.Int;
         $unit   = $match<unit>.Str;
     }
 
@@ -145,5 +147,9 @@ method _calculate-expires-at(--> DateTime) {
         last;
     }
 
-    return DateTime.now.later(|%($unit => $amount));
+    my $current_dt = DateTime.now.utc;
+    my $expires_at = $current_dt.later(|%($unit => $amount));
+    my $diff       = $expires_at - $current_dt;
+
+    return ( $expires_at, $diff.Int );
 }
